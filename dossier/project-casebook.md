@@ -1,128 +1,60 @@
 # Project notes
 
-[← Back to profile](../README.md)
+[Back to profile](../README.md)
 
-Notes on the projects I have worked on, including the problems they address, how they are put together, and what I would test next. Some are prototypes or team projects; the notes distinguish demonstrated features from proposed work.
+These are notes on the projects I have worked on, including prototypes and collaborative work. The descriptions are based on the linked repositories; suggested tests are not claims of completed results.
 
 ## NODUS
 
-**Enterprise change-impact investigation** · [Source repository](https://github.com/Glassman007/NODUS)
+[Repository](https://github.com/Glassman007/NODUS)
 
-**Problem.** A service change can affect consumers and teams that are invisible when looking only at the changed repository. Searching individual documents does not necessarily expose the dependency chain or establish whether a particular source supports a conclusion.
+A change to an authentication API can break a service that is not visible in the original repository. NODUS explores this by modeling dependencies and ownership in Neo4j, retrieving records within a user's scope and using Gemini to summarize findings. FastAPI coordinates the investigation and PostgreSQL persists state.
 
-**Approach.** Model services, contracts, records and ownership as relationships. Use graph navigation alongside scoped retrieval, then allow a model to organize the findings into an investigation report.
+The important distinction is between a model's conclusion and evidence that actually supports it. The public demo uses synthetic enterprise records; those records do not prove live connectors exist. The README identifies strict source enforcement and verification as areas requiring validation.
 
-```text
-Investigation objective → authorized records → relationship traversal
-                      → model-assisted analysis → report
-```
-
-**Architecture.** React/TypeScript provides the investigation UI, FastAPI coordinates requests, Neo4j represents relationships, and PostgreSQL stores application state. Gemini supports interpretation and report synthesis.
-
-**Design decision.** A model should not determine permissions or establish evidence merely by asserting a claim. Authorization belongs in the backend; conclusions require inspectable supporting records.
-
-**Current scope.** The repository describes graph-based investigation and Gemini reporting using the synthetic NEXUS organization. Strict evidence verification, selected-source enforcement and automated ownership/task delivery still require end-to-end validation. A live connector or delivered notification should not be inferred from a synthetic record.
-
-**What to test next.** Test a contract-change scenario in which a relevant source is excluded, and verify that no unauthorized information appears in the report or tool trace.
+**Test to run:** remove a relevant source from the allowed set, investigate a contract change and inspect the tool trace and report for unauthorized records. Record unsupported conclusions rather than accepting a fluent answer.
 
 ## A.P.E.X
 
-**Adaptive athlete planning** · [Source repository](https://github.com/Glassman007/A.P.E.X)
+[Repository](https://github.com/Glassman007/A.P.E.X)
 
-**Problem.** A fixed training schedule can become infeasible when fatigue, recovery or available time changes. A one-shot chatbot does not provide persistent planning state or reliable scheduling constraints.
+A training schedule can become infeasible after an athlete reports fatigue or loses an available training window. A.P.E.X treats planning as a recurring state transition rather than a one-off answer. LangGraph coordinates the planning loop, OR-Tools handles schedule constraints and a verifier checks candidate plans before persistence.
 
-**Approach.** Represent the athlete's current observations as state, interpret changes, decide whether to replan, solve a constrained scheduling problem and verify the proposed schedule before saving it.
-
-```text
-Observe → interpret → plan → optimize → verify → persist
-            ↑                                 │
-            └──────────── next observation ───┘
-```
-
-**Architecture.** The documented design uses FastAPI, LangGraph for orchestration, OR-Tools for optimization, SQLAlchemy and PostgreSQL for persistence, with test and simulation components.
-
-**Design decision.** Keep scheduling constraints outside the language model. The model can interpret a goal, but the constraint engine and verifier determine whether a proposal is acceptable.
-
-**Boundary.** This is a software planning project, not a clinically validated or professionally prescribed training system.
-
-**What to test next.** Simulate a sudden reduction in available training windows, compare the original and revised schedules, and test both feasible and infeasible constraint combinations.
+**Test to run:** simulate reduced availability and compare the revised schedule with the original. Check hard constraints independently of the model, including a case where no feasible schedule exists. This is a planning prototype, not a clinically validated training prescription.
 
 ## PRAMAN
 
-**Parcel data reconciliation and verification** · [Source repository](https://github.com/Glassman007/PRAMAN)
+[Repository](https://github.com/Glassman007/PRAMAN)
 
-**Problem.** Records about the same land parcel may disagree across departments in identifiers, owner names, area, boundaries or historical versions.
+Two departments can describe one parcel with conflicting identifiers, areas or boundary geometries. PRAMAN's documented workflow normalizes records, resolves identities, classifies discrepancies and preserves their provenance through reconciliation and review. It is designed to sit above existing data sources rather than overwrite them.
 
-**Approach.** Normalize incoming datasets, resolve parcel identities, detect and classify conflicts, and retain source evidence. A proposed resolution can then go through human review before it becomes part of a versioned parcel record.
-
-```text
-Source datasets → normalization → matching → conflict detection
-                → proposed reconciliation → review → version history
-```
-
-**Architecture.** The repository organizes work around source/schema mapping, unified spatial views, conflicts and reconciliation, evidence, parcel history and shared datasets.
-
-**Design decision.** Reconciliation is not simply overwriting one record with another. The system should retain the source disagreement and make the basis for the proposed resolution visible.
-
-**Boundary.** The application is a reconciliation prototype, not an authority for legal land ownership or a replacement for official cadastral records.
-
-**What to test next.** Construct a test set with conflicting parcel identifiers and geometry, then measure matching precision and inspect false matches before accepting a reconciliation rule.
-
-## MINE-TRACE
-
-**Operational memory for mining equipment** · [Source repository](https://github.com/Glassman007/MINE-TRACE)
-
-**Problem.** Equipment observations, repairs and technician notes can become disconnected when operators change shifts or connectivity is unreliable. A recorded repair does not establish that a recurring fault has been resolved.
-
-**Approach.** Associate observations and maintenance evidence with a machine and incident history. Use structured queries for exact records and semantic retrieval for differently worded observations that may describe similar symptoms.
-
-```text
-Equipment observation → local history → SQL records + semantic index
-                      → evidence reconstruction → optional AI analysis
-```
-
-**Architecture.** The documented design separates local and global components. SQL holds authoritative records, Qdrant supports semantic recall, and hosted model inference is an optional analysis dependency.
-
-**Design decision.** Distinguish a repair from a verified resolution, and keep the original record available when semantic retrieval or AI is unavailable.
-
-**Boundary.** Demonstration data is not real mine telemetry. This decision-support prototype does not replace trained maintenance staff, inspection, or safety authorization.
-
-**What to test next.** Evaluate retrieval on paraphrased incident notes and test whether history remains available during a simulated provider or connectivity failure.
-
-## Minimal Reproduction Extractor (MRE)
-
-**Automated software bug reproduction · HackCBS team project** · [Team repository](https://github.com/garvitsingh006/MRE_Hackcbs9.0)
-
-**Problem.** An issue report may describe a bug without providing a compact executable example. An LLM can generate a plausible script that fails for unrelated reasons.
-
-**Approach.** Give the model the issue and buggy codebase, allow bounded exploration and script execution, and then validate the candidate script against known buggy and fixed versions.
-
-```text
-Issue + buggy checkout → search/read/write/run → candidate repro
-                       → buggy version fails + fixed version passes
-```
-
-**Architecture.** Python, isolated Docker execution, curated SWE-bench Lite instances, provider abstraction and a deterministic verifier. The repository includes repro scripts, orchestration code and verification tests.
-
-**Design decision.** The acceptance criterion is observable program behavior, not whether a model's explanation seems reasonable. Reject irrelevant failure modes such as a broken import.
-
-**Boundary.** A curated demonstration does not establish benchmark-wide reproduction accuracy. This is collaborative hackathon work.
-
-**What to test next.** Evaluate a larger held-out set, categorize failure causes and report actual reproduction success against the deterministic acceptance criteria.
+**Test to run:** create a small labeled set containing matching parcels, overlapping geometry and different coordinate systems. Measure false matches separately from missed matches and inspect the source evidence behind each recommendation. The prototype does not establish legal ownership.
 
 ## ReValue
 
-**Electronic device verification** · [Source repository](https://github.com/Glassman007/ReValue)
+[Repository](https://github.com/Glassman007/ReValue)
 
-**Problem.** E-waste and device reuse workflows need a way to assess a device and organize evidence relevant to its verification.
+ReValue is a device-verification prototype for e-waste and reuse workflows. The public tree separates frontend, backend, ML service and Prisma components. That separation provides a useful place to define an explicit verification interface. The public overview does not establish supported device categories, model quality or production readiness.
 
-**Approach.** Separate user-facing interactions, application logic and machine-learning functionality. The project direction is to make the verification process easier to inspect and improve independently of the interface.
+**Test to run:** document the input and output contract for device verification, then assemble representative examples including missing or conflicting information. Evaluate the model separately from the user workflow before treating any prediction as a verified assessment.
 
-**Architecture.** The public repository contains frontend, backend, ML-service and Prisma components. The detailed model evaluation, supported device categories and production verification accuracy are not established by the public repository overview.
+## MINE-TRACE
 
-**Design decision.** Keep the ML service separate from the user workflow so that its behavior can be evaluated without treating a prediction as an authoritative device assessment.
+[Repository](https://github.com/Glassman007/MINE-TRACE)
 
-**What to test next.** Document the verification input/output contract and assemble representative validation examples before claiming any accuracy figure.
+A recurring fault can be treated as new if repairs, observations and maintenance notes are scattered across shifts. MINE-TRACE preserves machine-level operational history, combining structured SQL records with Qdrant retrieval. The design separates a local component from fleet-level synchronization and keeps AI findings advisory.
+
+**Test to run:** retrieve paraphrased observations for a known incident and compare against unrelated notes with similar vocabulary. Simulate a connectivity failure and confirm that original local records remain accessible. This prototype is not a substitute for equipment inspection or safety decisions.
+
+## MRE
+
+[Team repository](https://github.com/garvitsingh006/MRE)
+
+Minimal Reproduction Extractor is a collaborative hackathon project. Given an issue and a buggy repository, a model can inspect files, generate a script and execute it in an isolated Docker environment. The verifier compares execution on buggy and fixed revisions of curated SWE-bench Lite instances.
+
+The test is behavioral: a reproduction must demonstrate the reported failure, then succeed after the fix. A missing import or unrelated exception is not a successful reproduction.
+
+**Test to run:** evaluate a held-out set, categorize unrelated failures and report verified reproduction success with its denominator. A curated demonstration alone is not benchmark-wide accuracy.
 
 ## Pipeline Explorer
 
@@ -152,6 +84,4 @@ Issue + buggy checkout → search/read/write/run → candidate repro
 
 **What to test next.** Verify that object coordinates and connector geometry remain stable across edit, save, reload and undo/redo operations.
 
----
-
-[← Back to profile](../README.md) · [Study notes →](engineering-notebook.md)
+[Back to profile](../README.md) · [Study notes](engineering-notebook.md)
