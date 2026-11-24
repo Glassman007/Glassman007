@@ -1,10 +1,10 @@
-# Project casebook
+# Project notes
 
 [← Back to profile](../README.md)
 
-This casebook explains the problems, design choices and development boundaries of selected projects. It describes prototypes and documented designs rather than claiming production adoption, validated performance, or sole ownership of collaborative work.
+Notes on the projects I have worked on, including the problems they address, how they are put together, and what I would test next. Some are prototypes or team projects; the notes distinguish demonstrated features from proposed work.
 
-## 01 / NODUS
+## NODUS
 
 **Enterprise change-impact investigation** · [Source repository](https://github.com/Glassman007/NODUS)
 
@@ -21,11 +21,11 @@ Investigation objective → authorized records → relationship traversal
 
 **Design decision.** A model should not determine permissions or establish evidence merely by asserting a claim. Authorization belongs in the backend; conclusions require inspectable supporting records.
 
-**Demonstrated vs. intended.** The repository describes graph-based investigation and Gemini reporting using the synthetic NEXUS organization. Strict evidence verification, selected-source enforcement and automated ownership/task delivery still require end-to-end validation. A live connector or delivered notification should not be inferred from a synthetic record.
+**Current scope.** The repository describes graph-based investigation and Gemini reporting using the synthetic NEXUS organization. Strict evidence verification, selected-source enforcement and automated ownership/task delivery still require end-to-end validation. A live connector or delivered notification should not be inferred from a synthetic record.
 
-**Next investigation.** Test a contract-change scenario in which a relevant source is excluded, and verify that no unauthorized information appears in the report or tool trace.
+**What to test next.** Test a contract-change scenario in which a relevant source is excluded, and verify that no unauthorized information appears in the report or tool trace.
 
-## 02 / A.P.E.X
+## A.P.E.X
 
 **Adaptive athlete planning** · [Source repository](https://github.com/Glassman007/A.P.E.X)
 
@@ -45,9 +45,9 @@ Observe → interpret → plan → optimize → verify → persist
 
 **Boundary.** This is a software planning project, not a clinically validated or professionally prescribed training system.
 
-**Next investigation.** Simulate a sudden reduction in available training windows, compare the original and revised schedules, and test both feasible and infeasible constraint combinations.
+**What to test next.** Simulate a sudden reduction in available training windows, compare the original and revised schedules, and test both feasible and infeasible constraint combinations.
 
-## 03 / PRAMAN
+## PRAMAN
 
 **Parcel data reconciliation and verification** · [Source repository](https://github.com/Glassman007/PRAMAN)
 
@@ -66,9 +66,9 @@ Source datasets → normalization → matching → conflict detection
 
 **Boundary.** The application is a reconciliation prototype, not an authority for legal land ownership or a replacement for official cadastral records.
 
-**Next investigation.** Construct a test set with conflicting parcel identifiers and geometry, then measure matching precision and inspect false matches before accepting a reconciliation rule.
+**What to test next.** Construct a test set with conflicting parcel identifiers and geometry, then measure matching precision and inspect false matches before accepting a reconciliation rule.
 
-## 04 / MINE-TRACE
+## MINE-TRACE
 
 **Operational memory for mining equipment** · [Source repository](https://github.com/Glassman007/MINE-TRACE)
 
@@ -87,9 +87,9 @@ Equipment observation → local history → SQL records + semantic index
 
 **Boundary.** Demonstration data is not real mine telemetry. This decision-support prototype does not replace trained maintenance staff, inspection, or safety authorization.
 
-**Next investigation.** Evaluate retrieval on paraphrased incident notes and test whether history remains available during a simulated provider or connectivity failure.
+**What to test next.** Evaluate retrieval on paraphrased incident notes and test whether history remains available during a simulated provider or connectivity failure.
 
-## 05 / Minimal Reproduction Extractor (MRE)
+## Minimal Reproduction Extractor (MRE)
 
 **Automated software bug reproduction · HackCBS team project** · [Team repository](https://github.com/garvitsingh006/MRE_Hackcbs9.0)
 
@@ -108,9 +108,9 @@ Issue + buggy checkout → search/read/write/run → candidate repro
 
 **Boundary.** A curated demonstration does not establish benchmark-wide reproduction accuracy. This is collaborative hackathon work.
 
-**Next investigation.** Evaluate a larger held-out set, categorize failure causes and report actual reproduction success against the deterministic acceptance criteria.
+**What to test next.** Evaluate a larger held-out set, categorize failure causes and report actual reproduction success against the deterministic acceptance criteria.
 
-## 06 / ReValue
+## ReValue
 
 **Electronic device verification** · [Source repository](https://github.com/Glassman007/ReValue)
 
@@ -122,9 +122,9 @@ Issue + buggy checkout → search/read/write/run → candidate repro
 
 **Design decision.** Keep the ML service separate from the user workflow so that its behavior can be evaluated without treating a prediction as an authoritative device assessment.
 
-**Next investigation.** Document the verification input/output contract and assemble representative validation examples before claiming any accuracy figure.
+**What to test next.** Document the verification input/output contract and assemble representative validation examples before claiming any accuracy figure.
 
-## 07 / Pipeline Explorer
+## Pipeline Explorer
 
 **Transaction observability and fraud-rule inspection** · [Source repository](https://github.com/Glassman007/Pipeline-Explorer)
 
@@ -136,9 +136,9 @@ Issue + buggy checkout → search/read/write/run → candidate repro
 
 **Design decision.** A transaction flag is an analytical signal, not proof that fraud occurred. Rule behavior needs to be inspected against known examples.
 
-**Next investigation.** Add labeled test cases for ordinary and suspicious transactions, then compare rule coverage and false positives. No detection accuracy or production throughput is claimed here.
+**What to test next.** Add labeled test cases for ordinary and suspicious transactions, then compare rule coverage and false positives. No detection accuracy or production throughput is claimed here.
 
-## 08 / MindMap
+## MindMap
 
 **Local-first visual thinking canvas** · [Source repository](https://github.com/Glassman007/MindMap)
 
@@ -150,8 +150,8 @@ Issue + buggy checkout → search/read/write/run → candidate repro
 
 **Design decision.** Preserve user intent rather than imposing an algorithmic layout. Persistence should not corrupt the board if a write is interrupted.
 
-**Next investigation.** Verify that object coordinates and connector geometry remain stable across edit, save, reload and undo/redo operations.
+**What to test next.** Verify that object coordinates and connector geometry remain stable across edit, save, reload and undo/redo operations.
 
 ---
 
-[← Back to profile](../README.md) · [Engineering notebook →](engineering-notebook.md)
+[← Back to profile](../README.md) · [Study notes →](engineering-notebook.md)

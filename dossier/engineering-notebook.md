@@ -1,10 +1,10 @@
-# Engineering notebook
+# Study notes
 
-[← Back to profile](../README.md) · [Project casebook](project-casebook.md)
+[← Back to profile](../README.md) · [Project notes](project-casebook.md)
 
-This is a working record of the engineering questions I want to understand in depth. It separates design principles used in my projects from proposed experiments and learning objectives. It is not a list of completed research papers or claims of mastery.
+These are questions I want to explore through code and experiments. The exercises below are plans, not completed results.
 
-## 01 / Model reasoning is not system verification
+## Model reasoning is not system verification
 
 **Question.** When should an LLM be allowed to propose a decision, and when must a non-model component accept or reject it?
 
@@ -21,7 +21,7 @@ Inputs → candidate generation → structured candidate → explicit check
 
 **Experiment to run.** Create candidates that are plausible but invalid: an unsupported dependency claim, an impossible schedule and a reproduction that fails because of a missing import. Record whether the verifier rejects each candidate for the right reason. Compare candidate acceptance against a known reference rather than relying on an LLM's confidence.
 
-## 02 / Authoritative records and retrieval indexes
+## Authoritative records and retrieval indexes
 
 **Question.** What should a system trust when a retrieval result and the underlying data disagree?
 
@@ -29,7 +29,7 @@ A relational store can represent canonical entities and their state. A graph can
 
 **Experiment to run.** Start with structured incident records, generate paraphrased descriptions and retrieve similar notes. Measure retrieval relevance separately from record identity, and confirm conclusions against the canonical identifiers. Include an outdated index entry as a failure case.
 
-## 03 / Stateful software and recoverability
+## Stateful software and recoverability
 
 **Question.** How can a system preserve intent and history across failures?
 
@@ -37,7 +37,7 @@ APEX needs state across replanning cycles, MINE-TRACE needs incident history acr
 
 **Experiment to run.** Define valid transitions for a small incident state machine; test duplicate inputs, out-of-order events and interrupted persistence. Then verify the state after restart. Document the invariants and distinguish state reconstruction from simply restoring the last displayed screen.
 
-## 04 / Systems and model engineering study plan
+## Things I want to study
 
 | Study area | Practical exercise | Evidence of learning |
 | :--- | :--- | :--- |
@@ -49,7 +49,7 @@ APEX needs state across replanning cycles, MINE-TRACE needs incident history acr
 | Deep learning & transformers | Implement a small neural network and progressively build a compact language model. | Training curves, held-out metrics, documented architecture and ablations. |
 | Agent harnesses | Construct a tool-use evaluation set with deterministic acceptance criteria. | Trace logs, failure categories, and comparison of orchestration strategies. |
 
-## 05 / How I want to work
+## Working habits
 
 - Start with an explicit problem and the simplest testable solution.
 - Write down assumptions, architecture decisions and acceptance conditions.
@@ -57,7 +57,7 @@ APEX needs state across replanning cycles, MINE-TRACE needs incident history acr
 - Prefer reproducible tests and honest boundaries over unsupported performance claims.
 - Maintain concise engineering notes so that previous discoveries can inform future projects.
 
-These notes are intended to evolve as experiments are completed. Future results should include the exact setup, inputs, observed outcomes and limitations, rather than retroactively presenting the proposed work above as completed.
+As I run these experiments, I want to record the setup, results and limitations here.
 
 ---
 
